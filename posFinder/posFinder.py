@@ -1,4 +1,3 @@
-
 #   posFinder
 #   finds the center point XYZ locations for n objects evenly distributed over a length m
 #       for use with blender (or whatever)
@@ -46,7 +45,6 @@ for objSel in range(objectCount): #loop over each object
                 index[axis] += groupSpace
             elif (direction == "-"):
                 index[axis] -= groupSpace
-            #print(str(objCnt))
             objCnt = 0
     print("object " + str(objSel) + ": " + '{0:04f}'.format(index["x"]) + ", " + '{0:04f}'.format(index["y"]) + ", " + '{0:04f}'.format(index["z"]))
     outputFile.write("object " + str(objSel) + ": " + '{0:04f}'.format(index["x"]) + ", " + '{0:04f}'.format(index["y"]) + ", " + '{0:04f}'.format(index["z"]))
@@ -57,19 +55,6 @@ for objSel in range(objectCount): #loop over each object
     elif (direction == "-"):
         index[axis] -= (objectWidth + objectSpace)
 
-
-
-
-
-#for x in range(256):                #x = [0, 255] - runs 256 times
-    #y = x                           #output = input - 1:1 linear function
-    #gen_wv.write(str(y))            #output result to file
-    #if (x < 255):                   #if not last value
-        #if (((x + 1) % 16) == 0):       #if 16th value in row
-            #gen_wv.write(",")               #add comma and no space - end of line
-            #gen_wv.write("\n")              #add newline to proceed to next row
-        #else:                           #else (values 1-15)
-            #gen_wv.write(", ")               #add comma and space for value separation 
 outputFile.close()                      #close file - operation finished
     
     
