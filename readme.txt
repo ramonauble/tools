@@ -49,7 +49,11 @@ currently contains:
     • purpose: spaces n objects on axis x/y/z by +/- amount Amm
       • optional offset allows starting position to be shifted along the selected axis
       • optional grouping adds additional space of size Bmm every m objects
+
+  • drawFract
   ---------------------------------------
+    • language: python
+    • purpose: draws fractal patterns using turtle & L-system interpretation
 
       
      
