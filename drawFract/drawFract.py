@@ -15,13 +15,13 @@ P_01 = "F+[[X]-X]-F[-FX]+X" #X production
 P_02 = "FF"                 #F production
 posStack = deque()  #turtle position stack
 output = ""
-moveDistance = 16
+moveDistance = 18
 g = 7
-angle = 20
-tWidth = 3.2
-tColors = ["#6a4a3a", "#8a604c", "#9a6d59", "#a27560", "#aa7c67",
-           "#b58772", "#c1937f", "#ce9f8b", "#d4a794", "#e4baa9",
-           "#ecc7b7", "#f1d7cf", "#f7eae7", "#f9eeec", "#f9eeec"]
+angle = 22.5
+tWidth = 2.5
+tColors = ["#946851", "#9F6F57", "#A87860", "#AE816B", "#B48A76",
+           "#BA9481", "#C09D8C", "#C6A697", "#CCB0A2", "#D2B9AD",
+           "#D8C2B8", "#DECCC3", "#E4D5CE", "#EADED9", "#F0E8E4"]
 tcIndex = 0
 
 
@@ -63,8 +63,9 @@ t.pu()                                                  #disengage pen
 t.setx(-418)                                            #top left corner ||
 t.sety(392.5)                                           #                \/
 t.seth(0)                                               #turtle heading due right (0 deg)
-t.pencolor("#b5e3e0")                                  #pen color for bg squares
-#t.pencolor("#000000")                                   #pen color for bg squares
+t.pencolor("#a3dcd8")                                   #pen color for bg squares
+t.fillcolor("#a3dcd8")
+#t.pencolor("#000000")                                  #pen color for bg squares
 
 
 #starting pos
@@ -72,22 +73,24 @@ moveTurt("F", 12.5)
 angleTurt("+", 90)
 moveTurt("F", 12.5)
 t.seth(0)
-t.pd()                                              #engage pen
+t.pd()                                                  #engage pen
 
 for row in range(12):
     for col in range (12):
         sqrStack.append((t.xcor(), t.ycor(), t.heading()))
+        t.begin_fill()
         for sqr in bgAxiom:
             if (sqr == "F") or (sqr == "f"):
                 moveTurt(sqr, 45)
             elif (sqr == "+") or (sqr == "-"):
                 angleTurt(sqr, 90)
+        t.end_fill()
         sqrPos = sqrStack.pop()
         t.setx(sqrPos[0])
         t.sety(sqrPos[1])
         t.seth(sqrPos[2])
         moveTurt("f", (24 + 44.66666667))
-    t.pu()                                            #disengage pen
+    t.pu()                                              #disengage pen
     t.setx(-418 + 12.5)
     t.sety(392.5 - (row + 1)*(19.5 + 44.66666667) - 12.5)
     t.seth(0)
@@ -122,7 +125,7 @@ for cmd in range(len(axiom)):
         angleTurt(axiom[cmd], (angle + (.2/(tcIndex + 1))*r.random()))
     elif (axiom[cmd] == "["):
         posStack.append((t.xcor(), t.ycor(), t.heading()))
-        t.width(t.width() - .2)
+        t.width(t.width() - .16666667)
         tcIndex += 1
         t.pencolor(tColors[tcIndex])
     elif (axiom[cmd] == "]"):
@@ -132,7 +135,7 @@ for cmd in range(len(axiom)):
         t.sety(oldPos[1])
         t.seth(oldPos[2])
         t.pd()
-        t.width(t.width() + .2)
+        t.width(t.width() + .16666667)
         tcIndex -= 1
         t.pencolor(tColors[tcIndex])
 t.update()
