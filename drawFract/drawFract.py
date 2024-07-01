@@ -6,6 +6,8 @@
 import turtle as t
 import numpy as np
 import random as r
+from colorsys import hls_to_rgb
+from colorsys import rgb_to_hls
 from collections import deque
 t.home()
 
@@ -19,16 +21,18 @@ moveDistance = 18
 g = 7
 angle = 22.5
 tWidth = 2.5
-tColors = ["#946851", "#9F6F57", "#A87860", "#AE816B", "#B48A76",
-           "#BA9481", "#C09D8C", "#C6A697", "#CCB0A2", "#D2B9AD",
-           "#D8C2B8", "#DECCC3", "#E4D5CE", "#EADED9", "#F0E8E4"]
+tBaseHue = 21
+tBaseLit = .45
+tBaseSat = .29
 tcIndex = 0
 
 
 t.hideturtle() #hide turtle
 t.colormode(255)
 t.bgcolor("#daf1f0")
-t.color(tColors[tcIndex])
+rgbColor = hls_to_rgb(tBaseHue, tBaseLit, tBaseSat)
+print(str(rgbColor[0]) + ", " + str(rgbColor[1]) + ", " + str(rgbColor[2]))
+print(int(255*rgbColor[0]), int(255*rgbColor[1]), int(255*rgbColor[2]))
 t.pd() #pen down
 t.speed("fastest")  #fastest
 t.setx(80)
@@ -117,17 +121,20 @@ for generation in range (g):
 
 #input("Press any key when ready: ")
 
-t.pencolor(tColors[tcIndex])
+rgbColor = hls_to_rgb(tBaseHue, tBaseLit, tBaseSat)
+t.pencolor(int(255*rgbColor[0]), int(255*rgbColor[1]), int(255*rgbColor[2]))
 for cmd in range(len(axiom)):
     if (axiom[cmd] == "F") or (axiom[cmd] == "f"):
         moveTurt(axiom[cmd], moveDistance/g)
     elif (axiom[cmd] == "+") or (axiom[cmd] == "-"):
-        angleTurt(axiom[cmd], (angle + (.2/(tcIndex + 1))*r.random()))
+        angleTurt(axiom[cmd], (angle + (.33/(tcIndex + 1))*r.random()))
     elif (axiom[cmd] == "["):
         posStack.append((t.xcor(), t.ycor(), t.heading()))
-        t.width(t.width() - .16666667)
+        t.width(t.width() - .13333333)
         tcIndex += 1
-        t.pencolor(tColors[tcIndex])
+        tBaseLit += .033
+        rgbColor = hls_to_rgb(tBaseHue, tBaseLit, tBaseSat)
+        t.pencolor(int(255*rgbColor[0]), int(255*rgbColor[1]), int(255*rgbColor[2]))
     elif (axiom[cmd] == "]"):
         t.pu()
         oldPos = posStack.pop()
@@ -135,9 +142,12 @@ for cmd in range(len(axiom)):
         t.sety(oldPos[1])
         t.seth(oldPos[2])
         t.pd()
-        t.width(t.width() + .16666667)
+        t.width(t.width() + .13333333)
         tcIndex -= 1
-        t.pencolor(tColors[tcIndex])
+        tBaseLit -= .033
+        rgbColor = hls_to_rgb(tBaseHue, tBaseLit, tBaseSat)
+        t.pencolor(int(255*rgbColor[0]), int(255*rgbColor[1]), int(255*rgbColor[2]))
 t.update()
+
     
 t.mainloop()
