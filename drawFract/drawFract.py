@@ -26,13 +26,10 @@ tBaseLit = .45
 tBaseSat = .29
 tcIndex = 0
 
-
 t.hideturtle() #hide turtle
 t.colormode(255)
 t.bgcolor("#daf1f0")
 rgbColor = hls_to_rgb(tBaseHue, tBaseLit, tBaseSat)
-print(str(rgbColor[0]) + ", " + str(rgbColor[1]) + ", " + str(rgbColor[2]))
-print(int(255*rgbColor[0]), int(255*rgbColor[1]), int(255*rgbColor[2]))
 t.pd() #pen down
 t.speed("fastest")  #fastest
 t.setx(80)
@@ -59,46 +56,66 @@ def angleTurt(a, d):
         #subtract d from turtle angle (counter-clockwise rotation - degrees)
         t.left(d)
 
-sqrStack = deque()
 
 #draw background squares
+sqrColorRGB = rgb_to_hls(163/255, 220/255, 216/255)
+sqrX = -405.5
+sqrY = 443.33333333
+sqrH = 0
+sqrW = 45
+sqrDec = 8
+sBaseHue = sqrColorRGB[0]
+sBaseLit = sqrColorRGB[1]
+sBaseSat = sqrColorRGB[2]
+sqrStack = deque()                                      #init square pos stack
 posStack.append((t.xcor(), t.ycor(), t.heading()))      #record pos
 t.pu()                                                  #disengage pen
-t.setx(-418)                                            #top left corner ||
-t.sety(392.5)                                           #                \/
 t.seth(0)                                               #turtle heading due right (0 deg)
-t.pencolor("#a3dcd8")                                   #pen color for bg squares
-t.fillcolor("#a3dcd8")
-#t.pencolor("#000000")                                  #pen color for bg squares
+sqrColor = hls_to_rgb(sBaseHue, sBaseLit, sBaseSat)
+t.pencolor(int(255*sqrColor[0]), int(255*sqrColor[1]), int(255*sqrColor[2]))
+t.fillcolor(int(255*sqrColor[0]), int(255*sqrColor[1]), int(255*sqrColor[2]))
+print("R: " + str(int(255*sqrColor[0])) + ", G: " + str(int(255*sqrColor[1])) +
+       ", B: " + str(int(255*sqrColor[2])))
+                                    
+#print("X: " + str(t.xcor()) + ", Y: " + str(t.ycor()) + ", H: " + str(t.heading()) + "°")
 
-
-#starting pos
-moveTurt("F", 12.5)
-angleTurt("+", 90)
-moveTurt("F", 12.5)
-t.seth(0)
-t.pd()                                                  #engage pen
-
-for row in range(12):
-    for col in range (12):
-        sqrStack.append((t.xcor(), t.ycor(), t.heading()))
-        t.begin_fill()
-        for sqr in bgAxiom:
-            if (sqr == "F") or (sqr == "f"):
-                moveTurt(sqr, 45)
-            elif (sqr == "+") or (sqr == "-"):
-                angleTurt(sqr, 90)
-        t.end_fill()
-        sqrPos = sqrStack.pop()
-        t.setx(sqrPos[0])
-        t.sety(sqrPos[1])
-        t.seth(sqrPos[2])
-        moveTurt("f", (24 + 44.66666667))
-    t.pu()                                              #disengage pen
-    t.setx(-418 + 12.5)
-    t.sety(392.5 - (row + 1)*(19.5 + 44.66666667) - 12.5)
-    t.seth(0)
-    t.pd()                                            #engage pen
+for layer in range(5):
+    t.pu()
+    sqrColor = hls_to_rgb(sBaseHue, sBaseLit, sBaseSat)
+    t.setx(sqrX - sqrDec*layer)     #starting pos - top left sqr
+    t.sety(sqrY - sqrDec*layer)
+    t.seth(sqrH)   
+    for row in range(13):
+        if (row == 0):
+            t.pencolor("#daf1f0")
+            t.fillcolor("#daf1f0")
+        else:
+            t.pencolor(int(255*sqrColor[0]), int(255*sqrColor[1]), int(255*sqrColor[2]))
+            t.fillcolor(int(255*sqrColor[0]), int(255*sqrColor[1]), int(255*sqrColor[2]))
+        t.seth(270)                                          #offset for inner squares
+        moveTurt("f", (sqrDec*layer)/2)
+        t.seth(0)
+        moveTurt("f", (sqrDec*layer)/2)
+        t.pd()                                              #engage pen
+        for col in range (12):
+            sqrStack.append((t.xcor(), t.ycor(), t.heading()))
+            t.begin_fill()
+            for sqr in bgAxiom:
+                if (sqr == "F") or (sqr == "f"):
+                    moveTurt(sqr, sqrW - (layer*sqrDec))
+                elif (sqr == "+") or (sqr == "-"):
+                    angleTurt(sqr, 90)
+            t.end_fill()
+            sqrPos = sqrStack.pop()
+            t.setx(sqrPos[0])
+            t.sety(sqrPos[1])
+            t.seth(sqrPos[2])
+            moveTurt("f", (24 + 44.66666667))
+        t.pu()                                              #disengage pen
+        t.setx(sqrX)
+        t.sety(sqrY - (row + 1)*(19.5 + 44.66666667))
+    sBaseLit += .033
+                                                
 t.update()
 
 t.pu()
