@@ -20,15 +20,19 @@ output = ""
 moveDistance = 18
 g = 7
 angle = 22.5
-tWidth = 2.5
-tBaseHue = 21
-tBaseLit = .45
-tBaseSat = .29
+tWidth = 3
+tBaseHue = 0
+tBaseLit = .35
+tBaseSat = 0
+#tBaseHue = 21
+#tBaseLit = .45
+#tBaseSat = .29
 tcIndex = 0
+tMove = 18
 
 t.hideturtle() #hide turtle
 t.colormode(255)
-t.bgcolor("#daf1f0")
+t.bgcolor("#b5e3e0")
 rgbColor = hls_to_rgb(tBaseHue, tBaseLit, tBaseSat)
 t.pd() #pen down
 t.speed("fastest")  #fastest
@@ -79,20 +83,19 @@ print("R: " + str(int(255*sqrColor[0])) + ", G: " + str(int(255*sqrColor[1])) +
                                     
 #print("X: " + str(t.xcor()) + ", Y: " + str(t.ycor()) + ", H: " + str(t.heading()) + "°")
 
-for layer in range(5):
+for layer in range(6):
     t.pu()
     sqrColor = hls_to_rgb(sBaseHue, sBaseLit, sBaseSat)
     t.setx(sqrX - sqrDec*layer)     #starting pos - top left sqr
     t.sety(sqrY - sqrDec*layer)
     t.seth(sqrH)   
     for row in range(13):
+        t.pencolor(int(255*sqrColor[0]), int(255*sqrColor[1]), int(255*sqrColor[2]))
+        t.fillcolor(int(255*sqrColor[0]), int(255*sqrColor[1]), int(255*sqrColor[2]))
         if (row == 0):
-            t.pencolor("#daf1f0")
-            t.fillcolor("#daf1f0")
+            t.seth(90)                                          #offset for inner squares
         else:
-            t.pencolor(int(255*sqrColor[0]), int(255*sqrColor[1]), int(255*sqrColor[2]))
-            t.fillcolor(int(255*sqrColor[0]), int(255*sqrColor[1]), int(255*sqrColor[2]))
-        t.seth(270)                                          #offset for inner squares
+            t.seth(270)                                          #offset for inner squares
         moveTurt("f", (sqrDec*layer)/2)
         t.seth(0)
         moveTurt("f", (sqrDec*layer)/2)
@@ -123,6 +126,7 @@ oldPos = posStack.pop()
 t.setx(oldPos[0])
 t.sety(oldPos[1])
 t.seth(oldPos[2])
+
 t.pd()
 
 for generation in range (g):
@@ -138,18 +142,23 @@ for generation in range (g):
 
 #input("Press any key when ready: ")
 
-rgbColor = hls_to_rgb(tBaseHue, tBaseLit, tBaseSat)
-t.pencolor(int(255*rgbColor[0]), int(255*rgbColor[1]), int(255*rgbColor[2]))
 for cmd in range(len(axiom)):
     if (axiom[cmd] == "F") or (axiom[cmd] == "f"):
+        theBoy = .2*r.random()
+        rgbColor = hls_to_rgb(min(1, (max(0, ((t.ycor() + 480)/960)))), min(1, max(0, ((t.ycor() + 480)/960)) + theBoy), min(1, max(0, (abs(t.xcor())/420)) + theBoy))
+        #print(str(int(min(1, max(0, abs(t.heading()/360)))*255)))
+        t.pencolor(int(255*rgbColor[0]), int(255*rgbColor[1]), int(255*rgbColor[2]))
+        tPenColor = t.pencolor()
+        hslColor = rgb_to_hls(int(255*tPenColor[0]), int(255*tPenColor[1]), int(255*tPenColor[2]))
+        #print(hslColor[0])
         moveTurt(axiom[cmd], moveDistance/g)
     elif (axiom[cmd] == "+") or (axiom[cmd] == "-"):
-        angleTurt(axiom[cmd], (angle + (.33/(tcIndex + 1))*r.random()))
+        angleTurt(axiom[cmd], (angle + (1)*r.random()))
     elif (axiom[cmd] == "["):
         posStack.append((t.xcor(), t.ycor(), t.heading()))
-        t.width(t.width() - .13333333)
+        t.width(t.width() - .2166667)
         tcIndex += 1
-        tBaseLit += .033
+        tBaseLit += .025
         rgbColor = hls_to_rgb(tBaseHue, tBaseLit, tBaseSat)
         t.pencolor(int(255*rgbColor[0]), int(255*rgbColor[1]), int(255*rgbColor[2]))
     elif (axiom[cmd] == "]"):
@@ -159,11 +168,11 @@ for cmd in range(len(axiom)):
         t.sety(oldPos[1])
         t.seth(oldPos[2])
         t.pd()
-        t.width(t.width() + .13333333)
+        t.width(t.width() + .2166667)
         tcIndex -= 1
-        tBaseLit -= .033
+        tBaseLit -= .025
         rgbColor = hls_to_rgb(tBaseHue, tBaseLit, tBaseSat)
-        t.pencolor(int(255*rgbColor[0]), int(255*rgbColor[1]), int(255*rgbColor[2]))
+        t.pencolor(int(255*rgbColor[0]), int(255*rgbColor[1]), int(255*rgbColor[2])) 
 t.update()
 
     
